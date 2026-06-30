@@ -51,8 +51,6 @@ git clone https://github.com/tangmubai/SJTU-AI-Course.git
 1. 在 GitHub 创建仓库，并把本项目推送上去。
 2. 打开 Cloudflare 控制台，进入 Workers & Pages，创建 Pages 项目。
 3. 选择 Connect to Git，授权 GitHub，然后选择这个仓库。
-2. 打开 Cloudflare 控制台，进入 Workers & Pages，创建 Pages 项目。
-3. 选择 Connect to Git，授权 GitHub，然后选择这个仓库。
 4. 构建设置填写：
    - Framework preset: None
    - Production branch: main
