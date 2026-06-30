@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, rm } from "node:fs/promises";
+import { copyFile, mkdir, readdir } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,17 +17,14 @@ const siteFiles = [
 ];
 
 await mkdir(dist, { recursive: true });
-for (const entry of await readdir(dist)) {
-  await rm(join(dist, entry), { recursive: true, force: true });
-}
 
 for (const file of siteFiles) {
-  await cp(join(root, file), join(dist, file));
+  await copyFile(join(root, file), join(dist, file));
 }
 
 for (const entry of await readdir(root, { withFileTypes: true })) {
   if (entry.isFile() && extname(entry.name).toLowerCase() === ".pdf") {
-    await cp(join(root, entry.name), join(dist, entry.name));
+    await copyFile(join(root, entry.name), join(dist, entry.name));
   }
 }
 

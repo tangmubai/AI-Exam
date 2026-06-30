@@ -61,7 +61,7 @@ npm run build
 - Build output directory: `dist`
 - Root directory: 留空
 
-仓库中的 `wrangler.jsonc` 也固定了 `pages_build_output_dir` 为 `./dist`；`.assetsignore` 用于防止静态资产上传流程误传 `node_modules` 等本地文件。
+仓库中的 `wrangler.jsonc` 同时固定了 Pages 的 `pages_build_output_dir` 和 Workers 静态资源的 `assets.directory` 为 `./dist`。如果当前 Cloudflare 流程执行的是 `wrangler deploy`，`src/worker.js` 会作为 Worker 入口，并把 `/practice` 转到 `practice.html`；`.assetsignore` 用于防止静态资产上传流程误传 `node_modules` 等本地文件。
 
 旧的 `start-public.ps1` / `cloudflared-aitest.yml` 只保留作临时 Tunnel 发布备用，不再是推荐部署方式。
 
@@ -74,5 +74,6 @@ python .\scripts\build_questions.py
 ```
 
 脚本依赖 `pypdf`，生成的 `questions.js` 可供离线网页直接读取。
+
 
 
