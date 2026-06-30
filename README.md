@@ -65,6 +65,28 @@ npm run build
 
 旧的 `start-public.ps1` / `cloudflared-aitest.yml` 只保留作临时 Tunnel 发布备用，不再是推荐部署方式。
 
+## Public 仓库与 main 分支规则
+
+本仓库如果设为 public，建议把 `main` 当作生产分支保护起来。先推送一次 `.github/workflows/ci.yml`，等 GitHub Actions 跑出检查项后，在 GitHub 仓库的 `Settings -> Rules -> Rulesets`（或 `Branches -> Branch protection rules`）中为 `main` 增加规则：
+
+- Restrict target branches: `main`
+- Require a pull request before merging: 开启。多人协作时要求至少 1 个 approval；单人维护时也建议通过 PR 合并，便于触发预览和检查。
+- Require status checks to pass: 开启，并选择 `Build and validate static site`。
+- Require branches to be up to date before merging: 开启，避免旧分支绕过最新检查。
+- Require conversation resolution before merging: 开启。
+- Block force pushes: 开启。
+- Restrict deletions: 开启。
+- Require linear history: 建议开启，让生产分支历史更容易回滚和审计。
+- Require signed commits: 可选；如果你的本机 Git 已配置签名再开启，否则会影响日常提交。
+
+仓库安全设置建议：
+
+- 开启 Secret scanning 和 Push protection，防止 Cloudflare token、Tunnel 凭据、`.env` 等密钥进入 public 仓库。
+- GitHub Actions 的默认权限设为只读；当前 CI 已显式使用 `permissions: contents: read`。
+- 不提交 `dist/`、`node_modules/`、`.wrangler/`、`.dev.vars`、`.env`、Cloudflare Tunnel 凭据；这些已由 `.gitignore` / `.assetsignore` 覆盖。
+- Cloudflare Pages 的生产分支只设为 `main`，构建命令保持 `npm run build`，输出目录保持 `dist`。
+
+不要把 Cloudflare 部署成功本身设为合并前必需检查，除非你已经配置了 PR preview deployment。否则生产部署通常发生在合并到 `main` 之后，可能造成规则互相等待。
 ## 重新生成题库
 
 当 PDF 内容发生变化时，在本目录运行：
@@ -74,6 +96,7 @@ python .\scripts\build_questions.py
 ```
 
 脚本依赖 `pypdf`，生成的 `questions.js` 可供离线网页直接读取。
+
 
 
 

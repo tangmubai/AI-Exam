@@ -1,0 +1,46 @@
+name: Static site CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Build and validate static site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build static site
+        run: npm run build
+
+      - name: Validate question data
+        run: python scripts/validate_questions.py
+
+      - name: Check deployment artifact
+        shell: bash
+        run: |
+          test -f dist/index.html
+          test -f dist/practice.html
+          test -f dist/questions.js
+          test -f dist/_redirects
+          test -f dist/_headers
+          test ! -e dist/node_modules
