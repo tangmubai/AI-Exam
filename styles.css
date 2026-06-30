@@ -128,8 +128,8 @@ button { cursor: pointer; }
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 37px;
-  height: 37px;
+  width: 38px;
+  height: 38px;
   border-radius: 11px;
   color: white;
   background: var(--primary);
