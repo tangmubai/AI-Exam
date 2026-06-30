@@ -1,8 +1,8 @@
-# AI 课程题库练习
+# SJTU人工智能基础课程题库练习
 
 这是一个完全离线的 AI 课程题库练习网页，题目从同目录中的 7 份 PDF 自动生成并加载。
 
-在线体验地址：<https://aicourse.sj-tu.com>
+您可以访问 <https://aicourse.sj-tu.com> 直接开始练习。
 
 **注意：如果更换浏览器、使用隐私模式，或清除浏览器站点数据，练习记录会丢失，因为数据保存在当前浏览器的 `localStorage` 中。**
 
@@ -67,14 +67,6 @@ npm run build
 
 构建产物会生成到 `dist/`。Cloudflare Pages 会使用 `_redirects` 将 `/practice` 重写到 `practice.html`，并使用 `_headers` 设置基础安全头和缓存策略。
 
-如果 Cloudflare 报错 Asset too large，且路径里出现 `node_modules/workerd/bin/workerd`，通常表示 Pages 正在上传仓库根目录而不是 `dist/`。这时请回到 Pages 项目的 Settings -> Build & deployments，确认：
-
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Root directory: 留空
-
-仓库中的 `wrangler.jsonc` 也固定了 Pages 的 `pages_build_output_dir` 和 Workers 静态资源的 `assets.directory` 为 `./dist`。如果当前 Cloudflare 流程执行的是 `wrangler deploy`，`src/worker.js` 会作为 Worker 入口，并把 `/practice` 转到 `practice.html`；`.assetsignore` 用于避免静态资源上传流程误传 `node_modules` 等本地文件。
-
 也可以通过 `start-public.ps1` 使用 Tunnel 发布。
 
 ## 重新生成题库
@@ -88,8 +80,6 @@ python .\scripts\build_questions.py
 脚本依赖 `pypdf`，生成的 `questions.js` 可供离线网页直接读取。
 
 ## 许可证
-
-Copyright © 2026 AI Exam Project contributors.
 
 代码部分采用 MIT License，完整许可见 [LICENSE](LICENSE)。
 
