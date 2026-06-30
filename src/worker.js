@@ -4,9 +4,10 @@ export default {
 
     if (url.pathname === "/practice" || url.pathname === "/practice/") {
       url.pathname = "/practice.html";
-      return env.ASSETS.fetch(new Request(url, request));
+      return env.STATIC_ASSETS.fetch(new Request(url, request));
     }
 
-    return env.ASSETS.fetch(request);
+    return env.STATIC_ASSETS.fetch(request);
   }
 };
+
