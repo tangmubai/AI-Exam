@@ -30,19 +30,22 @@
 
 然后访问 `http://127.0.0.1:8788`。服务使用并发 HTTP 处理器，可同时为多个用户提供静态页面，并支持 `/practice` 路由。每个用户的进度仍单独保存在自己的浏览器中，不会互相看到，也不会跨设备同步。
 
-## GitHub + Cloudflare Pages 部署
+## Cloudflare Pages 部署
 
-主部署方式改为：代码推送到 GitHub 后，由 GitHub Actions 构建静态文件并发布到 Cloudflare Pages。部署产物只包含网页、脚本、样式和 PDF，不会把本地服务脚本、Tunnel 配置或开发目录发布出去。
+主部署方式改为：先把代码推送到 GitHub，再在 Cloudflare Pages 控制台手动连接该 GitHub 仓库。之后每次推送到生产分支，Cloudflare 会自动拉取仓库、运行构建命令并发布。部署产物只包含网页、脚本、样式和 PDF，不会把本地服务脚本、Tunnel 配置或开发目录发布出去。
 
 一次性准备：
 
-1. 在 Cloudflare Pages 创建项目，默认项目名使用 `ai-exam`。如果你使用其他项目名，在 GitHub 仓库变量中设置 `CLOUDFLARE_PAGES_PROJECT_NAME`。
-2. 在 Cloudflare 创建 API Token，权限至少包含对应账号的 Cloudflare Pages 编辑权限。
-3. 在 GitHub 仓库的 `Settings -> Secrets and variables -> Actions` 中添加：
-   - Secret: `CLOUDFLARE_ACCOUNT_ID`
-   - Secret: `CLOUDFLARE_API_TOKEN`
-   - Variable（可选）: `CLOUDFLARE_PAGES_PROJECT_NAME`
-4. 推送到 `main` 分支后，`.github/workflows/deploy-cloudflare-pages.yml` 会自动运行部署。
+1. 在 GitHub 创建仓库，并把本项目推送上去。
+2. 打开 Cloudflare 控制台，进入 `Workers & Pages`，创建 Pages 项目。
+3. 选择 `Connect to Git`，授权 GitHub，然后选择这个仓库。
+4. 构建设置填写：
+   - Framework preset: `None`
+   - Production branch: `main`
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+   - Root directory: 留空（仓库根目录）
+5. 保存并部署。以后推送到 `main` 分支会自动触发 Cloudflare Pages 重新构建和发布。
 
 本地验证构建：
 
@@ -51,13 +54,6 @@ npm run build
 ```
 
 构建产物会生成到 `dist/`。Cloudflare Pages 使用 `_redirects` 将 `/practice` 重写到 `practice.html`，并使用 `_headers` 设置基础安全头和缓存策略。
-
-如需手动部署：
-
-```powershell
-npm run build
-npx wrangler@latest pages deploy dist --project-name ai-exam
-```
 
 旧的 `start-public.ps1` / `cloudflared-aitest.yml` 只保留作临时 Tunnel 发布备用，不再是推荐部署方式。
 

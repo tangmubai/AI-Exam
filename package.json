@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-site.mjs",
-    "deploy:cloudflare": "npm run build && wrangler pages deploy dist --project-name ai-exam"
+    "build": "node scripts/build-site.mjs"
   }
 }
