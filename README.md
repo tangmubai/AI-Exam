@@ -1,4 +1,5 @@
 # SJTU人工智能基础课程题库练习
+# SJTU人工智能基础课程题库练习
 
 这是一个完全离线的 AI 课程题库练习网页，题目从同目录中的 7 份 PDF 自动生成并加载。
 
@@ -33,6 +34,7 @@ git clone https://github.com/tangmubai/SJTU-AI-Course.git
 ## 本地服务
 
 如果你希望通过本地 HTTP 服务访问，运行：
+如果你希望通过本地 HTTP 服务访问，运行：
 
 ```powershell
 .\start-local.ps1
@@ -41,17 +43,29 @@ git clone https://github.com/tangmubai/SJTU-AI-Course.git
 然后访问 `http://127.0.0.1:8788`。
 
 这个服务支持并发静态文件访问和 `/practice` 路由。每个用户的练习进度仍然保存在各自浏览器中，不会互相看到，也不会跨设备同步。
+然后访问 `http://127.0.0.1:8788`。
+
+这个服务支持并发静态文件访问和 `/practice` 路由。每个用户的练习进度仍然保存在各自浏览器中，不会互相看到，也不会跨设备同步。
 
 ## Cloudflare Pages 部署
 
 推荐的部署方式是先把代码推送到 GitHub，再在 Cloudflare Pages 控制台连接该仓库。以后每次推送到生产分支，Cloudflare 会自动拉取代码、执行构建并发布。
+推荐的部署方式是先把代码推送到 GitHub，再在 Cloudflare Pages 控制台连接该仓库。以后每次推送到生产分支，Cloudflare 会自动拉取代码、执行构建并发布。
 
+一次性准备步骤如下：
 一次性准备步骤如下：
 
 1. 在 GitHub 创建仓库，并把本项目推送上去。
 2. 打开 Cloudflare 控制台，进入 Workers & Pages，创建 Pages 项目。
 3. 选择 Connect to Git，授权 GitHub，然后选择这个仓库。
+2. 打开 Cloudflare 控制台，进入 Workers & Pages，创建 Pages 项目。
+3. 选择 Connect to Git，授权 GitHub，然后选择这个仓库。
 4. 构建设置填写：
+   - Framework preset: None
+   - Production branch: main
+   - Build command: npm run build
+   - Build output directory: dist
+   - Root directory: 留空
    - Framework preset: None
    - Production branch: main
    - Build command: npm run build
@@ -65,6 +79,7 @@ git clone https://github.com/tangmubai/SJTU-AI-Course.git
 npm run build
 ```
 
+构建产物会生成到 `dist/`。Cloudflare Pages 会使用 `_redirects` 将 `/practice` 重写到 `practice.html`，并使用 `_headers` 设置基础安全头和缓存策略。
 构建产物会生成到 `dist/`。Cloudflare Pages 会使用 `_redirects` 将 `/practice` 重写到 `practice.html`，并使用 `_headers` 设置基础安全头和缓存策略。
 
 也可以通过 `start-public.ps1` 使用 Tunnel 发布。
@@ -84,6 +99,8 @@ python .\scripts\build_questions.py
 代码部分采用 MIT License，完整许可见 [LICENSE](LICENSE)。
 
 题库文本、解析文案、说明文字等内容采用 Creative Commons Attribution-ShareAlike 4.0 International，完整许可见 [LICENSE-CONTENT](LICENSE-CONTENT)。
+题库文本、解析文案、说明文字等内容采用 Creative Commons Attribution-ShareAlike 4.0 International，完整许可见 [LICENSE-CONTENT](LICENSE-CONTENT)。
 
+如果你希望将项目公开发布或二次分发，请同时保留对应的版权声明和许可证文本。
 如果你希望将项目公开发布或二次分发，请同时保留对应的版权声明和许可证文本。
 
