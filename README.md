@@ -55,6 +55,14 @@ npm run build
 
 构建产物会生成到 `dist/`。Cloudflare Pages 使用 `_redirects` 将 `/practice` 重写到 `practice.html`，并使用 `_headers` 设置基础安全头和缓存策略。
 
+如果 Cloudflare 报错 `Asset too large`，并且路径里出现 `node_modules/workerd/bin/workerd`，说明 Cloudflare 正在上传仓库根目录而不是 `dist/`。回到 Pages 项目的 `Settings -> Build & deployments`，确认：
+
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Root directory: 留空
+
+仓库中的 `wrangler.jsonc` 也固定了 `pages_build_output_dir` 为 `./dist`；`.assetsignore` 用于防止静态资产上传流程误传 `node_modules` 等本地文件。
+
 旧的 `start-public.ps1` / `cloudflared-aitest.yml` 只保留作临时 Tunnel 发布备用，不再是推荐部署方式。
 
 ## 重新生成题库
@@ -66,3 +74,5 @@ python .\scripts\build_questions.py
 ```
 
 脚本依赖 `pypdf`，生成的 `questions.js` 可供离线网页直接读取。
+
+

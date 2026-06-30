@@ -1,0 +1,16 @@
+node_modules/
+.git/
+.github/
+.agents/
+.claude/
+.codex/
+.cloudflared-sjtu/
+__pycache__/
+*.pyc
+.env
+.dev.vars
+cloudflared-aitest.yml
+serve.py
+start-local.ps1
+start-public.ps1
+scripts/

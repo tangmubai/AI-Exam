@@ -16,8 +16,10 @@ const siteFiles = [
   "questions.js"
 ];
 
-await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
+for (const entry of await readdir(dist)) {
+  await rm(join(dist, entry), { recursive: true, force: true });
+}
 
 for (const file of siteFiles) {
   await cp(join(root, file), join(dist, file));
