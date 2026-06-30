@@ -1,0 +1,12 @@
+.cloudflared-sjtu/
+__pycache__/
+*.pyc
+.agent/
+.agents/
+.claude/
+.codex/
+dist/
+.wrangler/
+.dev.vars
+.env
+cloudflared-aitest.yml

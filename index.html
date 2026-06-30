@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>AI 课程题库练习</title>
+  <script>
+    // Apply the saved (or system) theme before first paint to avoid a flash.
+    (function () {
+      try {
+        var t = localStorage.getItem("ai-course-theme");
+        if (t !== "dark" && t !== "light") {
+          t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="homeButton" class="brand" type="button" aria-label="返回首页">
+      <span class="brand-mark">AI</span>
+      <span>课程题库练习</span>
+    </button>
+    <div class="top-actions">
+      <div class="top-stats">
+        <span>已答 <strong id="answeredStat">0</strong></span>
+        <span>错题 <strong id="wrongStat">0</strong></span>
+      </div>
+      <button id="themeToggle" class="icon-button" type="button" aria-label="切换深色模式">🌙</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section id="homeView" class="view">
+      <div class="hero">
+        <p class="eyebrow">本地离线题库</p>
+        <h1>按顺序学完，再集中消灭错题。</h1>
+        <p class="hero-copy">题目、答案和解析均来自当前目录的 7 份 PDF。练习记录只保存在这台电脑的浏览器中。</p>
+      </div>
+
+      <div class="mode-grid">
+        <article class="mode-card primary-card">
+          <div>
+            <span class="mode-icon">01</span>
+            <h2>顺序练习全部题目</h2>
+            <p>严格按照 PDF 文件及题目原顺序练习。</p>
+          </div>
+          <button id="allModeButton" class="button primary" type="button">开始顺序练习</button>
+        </article>
+        <article class="mode-card">
+          <div>
+            <span class="mode-icon warm">!</span>
+            <h2>只练错题</h2>
+            <p id="wrongModeDescription">目前还没有错题。</p>
+          </div>
+          <button id="wrongModeButton" class="button secondary" type="button">开始错题练习</button>
+        </article>
+      </div>
+
+      <a class="exam-cta" href="/practice">
+        <span class="exam-cta-main">
+          <span>🧪 模拟测试</span>
+          <span class="exam-cta-sub">自定义考试范围与各题型数量组卷，交卷后错题自动加入错题集。</span>
+        </span>
+        <span class="exam-cta-go">进入 →</span>
+      </a>
+
+      <section class="library-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">题库概览</p>
+            <h2><span id="questionCount">0</span> 道题</h2>
+            <p class="library-sub">已学 <strong id="learnedStat">0</strong> 道 · 总进度 <strong id="learnedPct">0%</strong></p>
+            <div class="overall-track"><div id="overallBar" class="overall-bar"></div></div>
+          </div>
+          <button id="resetButton" class="text-button danger" type="button">清空全部记录</button>
+        </div>
+        <div id="documentList" class="document-list"></div>
+      </section>
+    </section>
+
+    <section id="practiceView" class="view hidden">
+      <div class="practice-header">
+        <button id="exitButton" class="text-button" type="button">← 返回首页</button>
+        <span id="modeLabel" class="mode-label"></span>
+      </div>
+
+      <div class="progress-row">
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+        <span id="progressText"></span>
+      </div>
+
+      <article class="question-card">
+        <div class="question-meta">
+          <span id="typeBadge" class="badge"></span>
+          <span id="sourceLabel"></span>
+          <a id="pdfLink" target="_blank" rel="noopener">查看原 PDF</a>
+        </div>
+        <h2 id="questionPrompt"></h2>
+        <div id="answerArea" class="answer-area"></div>
+        <p id="gradingHint" class="grading-hint hidden"></p>
+        <div class="question-actions">
+          <button id="prevButton" class="text-button" type="button">← 上一题</button>
+          <button id="removeWrongButton" class="text-button danger hidden" type="button">不再练这题</button>
+          <button id="submitButton" class="button primary" type="button">提交答案</button>
+          <button id="nextButton" class="button primary hidden" type="button">下一题</button>
+        </div>
+        <section id="feedbackPanel" class="feedback hidden" aria-live="polite">
+          <div class="feedback-title-row">
+            <h3 id="feedbackTitle"></h3>
+            <button id="wrongToggleButton" class="text-button" type="button"></button>
+          </div>
+          <p><strong>正确答案：</strong><span id="correctAnswer"></span></p>
+          <p id="explanationRow"><strong>解析：</strong><span id="explanation"></span></p>
+          <div id="revealGradeControls" class="reveal-grade hidden"></div>
+        </section>
+      </article>
+    </section>
+
+    <section id="completeView" class="view hidden">
+      <article class="complete-card">
+        <div class="complete-icon">✓</div>
+        <p class="eyebrow">本轮完成</p>
+        <h1 id="completeTitle">练习完成</h1>
+        <p id="completeSummary"></p>
+        <div class="complete-actions">
+          <button id="completeHomeButton" class="button secondary" type="button">返回首页</button>
+          <button id="completeWrongButton" class="button primary" type="button">继续练错题</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

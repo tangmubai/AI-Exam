@@ -1,0 +1,10 @@
+{
+  "name": "ai-course-practice",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-site.mjs",
+    "deploy:cloudflare": "npm run build && wrangler pages deploy dist --project-name ai-exam"
+  }
+}

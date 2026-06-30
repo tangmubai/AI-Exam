@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>模拟测试 · AI 课程题库练习</title>
+  <script>
+    // Apply the saved (or system) theme before first paint to avoid a flash.
+    (function () {
+      try {
+        var t = localStorage.getItem("ai-course-theme");
+        if (t !== "dark" && t !== "light") {
+          t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="返回首页">
+      <span class="brand-mark">AI</span>
+      <span>课程题库练习</span>
+    </a>
+    <div class="top-actions">
+      <div class="top-stats">
+        <span>已答 <strong id="answeredStat">0</strong></span>
+        <span>错题 <strong id="wrongStat">0</strong></span>
+      </div>
+      <button id="themeToggle" class="icon-button" type="button" aria-label="切换深色模式">🌙</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <!-- 组卷配置 -->
+    <section id="configView" class="view">
+      <div class="hero">
+        <p class="eyebrow">模拟测试</p>
+        <h1>自定义组卷，模拟考试。</h1>
+        <p class="hero-copy">选择考试范围与各题型数量，系统从范围内随机抽题组成试卷。交卷后自动判分，错题去重后加入错题集。</p>
+      </div>
+
+      <div class="config-grid">
+        <section class="config-card">
+          <div class="config-card-head">
+            <h2>考试范围</h2>
+            <div class="scope-actions">
+              <button id="scopeAll" class="text-button" type="button">全选</button>
+              <button id="scopeNone" class="text-button" type="button">清空</button>
+            </div>
+          </div>
+          <div id="scopeList" class="scope-list"></div>
+        </section>
+
+        <section class="config-card">
+          <div class="config-card-head">
+            <h2>题型与数量</h2>
+            <button id="fillRandom" class="text-button" type="button">智能填满</button>
+          </div>
+          <div id="typeList" class="type-list"></div>
+          <label class="shuffle-row">
+            <input type="checkbox" id="shuffleOrder" checked> 打乱题目顺序
+          </label>
+          <div class="config-summary">本卷共 <strong id="totalCount">0</strong> 题</div>
+          <button id="startExam" class="button primary" type="button">开始测试</button>
+          <p id="configError" class="config-error hidden"></p>
+        </section>
+      </div>
+    </section>
+
+    <!-- 答题 -->
+    <section id="examView" class="view hidden">
+      <div class="practice-header">
+        <button id="quitExam" class="text-button" type="button">← 退出测试</button>
+        <span class="mode-label">模拟测试</span>
+      </div>
+
+      <div class="progress-row">
+        <div class="progress-track"><div id="examProgressBar" class="progress-bar"></div></div>
+        <span id="examProgressText"></span>
+      </div>
+
+      <div class="exam-layout">
+        <article class="question-card">
+          <div class="question-meta">
+            <span id="examTypeBadge" class="badge"></span>
+            <span id="examSourceLabel"></span>
+            <a id="examPdfLink" target="_blank" rel="noopener">查看原 PDF</a>
+          </div>
+          <h2 id="examPrompt"></h2>
+          <div id="examAnswerArea" class="answer-area"></div>
+          <p id="examHint" class="grading-hint hidden"></p>
+          <div class="question-actions">
+            <button id="examPrev" class="text-button" type="button">← 上一题</button>
+            <button id="examClear" class="text-button" type="button">清除本题</button>
+            <button id="examNext" class="button primary" type="button">下一题</button>
+          </div>
+        </article>
+
+        <aside class="palette-card">
+          <div class="palette-head">
+            <h3>答题卡</h3>
+            <span id="answeredCount" class="palette-count"></span>
+          </div>
+          <div id="palette" class="palette"></div>
+          <button id="submitExam" class="button primary" type="button">交卷</button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 成绩与解析 -->
+    <section id="resultView" class="view hidden">
+      <article class="result-summary">
+        <p class="eyebrow">测试完成</p>
+        <div class="score-ring">
+          <span id="scoreValue">0</span>
+          <span class="score-unit">分</span>
+        </div>
+        <p id="resultSummaryText" class="result-summary-text"></p>
+        <div id="resultBreakdown" class="result-breakdown"></div>
+        <div class="result-actions">
+          <a href="/" class="button secondary">返回首页</a>
+          <button id="retryExam" class="button primary" type="button">再考一次</button>
+        </div>
+      </article>
+
+      <div class="review-head">
+        <h2>逐题解析</h2>
+        <div class="review-filter">
+          <button id="filterAll" class="chip active" type="button">全部</button>
+          <button id="filterWrong" class="chip" type="button">仅错题</button>
+        </div>
+      </div>
+      <div id="reviewList" class="review-list"></div>
+    </section>
+  </main>
+
+  <script src="questions.js"></script>
+  <script src="practice.js"></script>
+</body>
+</html>
