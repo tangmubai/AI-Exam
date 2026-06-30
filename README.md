@@ -41,9 +41,6 @@ git clone https://github.com/tangmubai/SJTU-AI-Course.git
 然后访问 `http://127.0.0.1:8788`。
 
 这个服务支持并发静态文件访问和 `/practice` 路由。每个用户的练习进度仍然保存在各自浏览器中，不会互相看到，也不会跨设备同步。
-然后访问 `http://127.0.0.1:8788`。
-
-这个服务支持并发静态文件访问和 `/practice` 路由。每个用户的练习进度仍然保存在各自浏览器中，不会互相看到，也不会跨设备同步。
 
 ## Cloudflare Pages 部署
 
