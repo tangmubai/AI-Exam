@@ -531,6 +531,26 @@
       .replaceAll('"', "&quot;");
   }
 
+  function generateGitHubIssueUrl() {
+    if (!session || !session.questions[session.index]) return null;
+    
+    const question = session.questions[session.index];
+    const repoUrl = "https://github.com/tangmubai/SJTU-AI-Course";
+    const title = `【反馈】${question.document.replace(/\.pdf$/i, "")} - 第 ${question.page} 页 - 题 ${question.number}`;
+    const body = `## 题目信息\n- **PDF**: ${question.document}\n- **页码**: 第 ${question.page} 页\n- **题号**: 第 ${question.number} 题\n- **题型**: ${question.type}\n\n## 问题描述\n请在此处描述您发现的问题：\n\n## 问题内容\n**题目**: ${question.prompt}\n\n**答案**: ${question.answer}\n\n## 建议\n请提出您的改进建议：`;
+    
+    const encodedTitle = encodeURIComponent(title);
+    const encodedBody = encodeURIComponent(body);
+    return `${repoUrl}/issues/new?title=${encodedTitle}&body=${encodedBody}`;
+  }
+
+  function reportIssue() {
+    const url = generateGitHubIssueUrl();
+    if (url) {
+      window.open(url, "_blank", "noopener");
+    }
+  }
+
   function formatPrompt(value, type) {
     let text = String(value);
     const fillLike = ["填空题", "计算题", "简答题"].includes(type);
@@ -563,6 +583,7 @@
   $("nextButton").addEventListener("click", nextQuestion);
   $("prevButton").addEventListener("click", prevQuestion);
   $("removeWrongButton").addEventListener("click", removeCurrentWrong);
+  $("reportIssueButton").addEventListener("click", reportIssue);
   $("exitButton").addEventListener("click", goHome);
   $("homeButton").addEventListener("click", goHome);
   $("completeHomeButton").addEventListener("click", goHome);
